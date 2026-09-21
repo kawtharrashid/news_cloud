@@ -23,6 +23,16 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Create placeholder .env
+        # .env is intentionally gitignored (it holds the real API key), but
+        # pubspec.yaml declares it as a bundled asset, so `flutter pub get`
+        # / `flutter analyze` fail on a fresh checkout without it. The
+        # tests never read real .env values (they use a fake repository),
+        # so placeholder text is enough to satisfy the asset declaration.
+        run: |
+          echo "API_URL=https://newsapi.org/v2" >> .env
+          echo "API_KEY=placeholder_key_for_ci" >> .env
+
       - name: Install dependencies
         run: flutter pub get
 

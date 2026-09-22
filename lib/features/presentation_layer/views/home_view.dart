@@ -98,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
                   child: SizedBox(height: 24),
                 ),
               ],
-              NewsListViewBuilder<NewsCubit>(),
+              const NewsListViewBuilder<NewsCubit>(),
             ],
           ),
         ),

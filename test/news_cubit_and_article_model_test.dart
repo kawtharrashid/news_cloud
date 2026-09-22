@@ -50,7 +50,7 @@ class FakeNewsRepository implements NewsRepository {
 void main() {
   group('ArticleModel', () {
     test('parses a valid article JSON correctly', () {
-      final model = ArticleModel.fromJson({
+      final model = ArticleModel.fromJson(const {
         'urlToImage': 'https://example.com/image.jpg',
         'title': 'Flutter News',
         'description': 'A Flutter article.',
@@ -76,7 +76,7 @@ void main() {
     });
 
     test('returns null for an invalid publication date', () {
-      final model = ArticleModel.fromJson({
+      final model = ArticleModel.fromJson(const {
         'title': 'Invalid Date',
         'publishedAt': 'not-a-date',
       });
@@ -85,7 +85,7 @@ void main() {
     });
 
     test('uses the default title when title is missing', () {
-      final model = ArticleModel.fromJson({});
+      final model = ArticleModel.fromJson(const {});
 
       expect(model.title, 'No Title Available');
     });

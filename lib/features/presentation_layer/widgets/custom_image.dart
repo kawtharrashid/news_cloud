@@ -27,7 +27,7 @@ class CustomImage extends StatelessWidget {
         placeholder: (context, url) {
           return Container(
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
             ),
             child: SizedBox(
               height: 200,

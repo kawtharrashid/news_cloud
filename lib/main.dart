@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:news_cloud/core/config/theme/cubit/theme_cubit.dart';
+import 'package:news_cloud/core/config/theme_data/app_themes.dart';
 import 'package:news_cloud/core/routes/app_routes.dart';
 import 'package:news_cloud/core/routes/route_generator.dart';
 import 'package:news_cloud/features/domain_layer/repositories/news_repository.dart';
@@ -28,28 +30,84 @@ void main() async {
 class NewsCloud extends StatelessWidget {
   const NewsCloud({super.key, required this.repository});
   final NewsRepository repository;
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider<NewsRepository>.value(
-      value: repository,
-      child: BlocProvider<NewsCubit>(
-        create: (context) => NewsCubit(
-          getTopHeadlines: GetTopHeadlines(repository: repository),
-          searchArticles: SearchArticles(repository: repository),
-        )..loadGeneralNews(),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: AppRoutes.home,
-          onGenerateRoute: RouteGenerator.generateRoute,
-          title: 'NewsCloud',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.black,
+        value: repository,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => NewsCubit(
+                getTopHeadlines: GetTopHeadlines(repository: repository),
+                searchArticles: SearchArticles(repository: repository),
+              )..loadGeneralNews(),
             ),
-            useMaterial3: true,
+            BlocProvider(
+              create: (context) => ThemeCubit(),
+            ),
+          ],
+          child: BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, state) {
+              return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  initialRoute: AppRoutes.home,
+                  onGenerateRoute: RouteGenerator.generateRoute,
+                  title: 'NewsCloud',
+                  theme: AppThemes.light,
+                  darkTheme: AppThemes.dark,
+                  themeMode: state);
+            },
           ),
-        ),
-      ),
-    );
+        )
+
+        // BlocProvider<NewsCubit>(
+        //   create: (context) => NewsCubit(
+        //     getTopHeadlines: GetTopHeadlines(repository: repository),
+        //     searchArticles: SearchArticles(repository: repository),
+        //   )..loadGeneralNews(),
+        //   child: BlocProvider(
+        //     create: (context) => ThemeCubit<ThemeMode>(),
+        //     child: MaterialApp(
+        //       debugShowCheckedModeBanner: false,
+        //       initialRoute: AppRoutes.home,
+        //       onGenerateRoute: RouteGenerator.generateRoute,
+        //       title: 'NewsCloud',
+        //       theme:
+        //           ThemeMode == ThemeMode.light ? AppThemes.dark : AppThemes.light,
+        //       darkTheme: AppThemes.dark,
+        //       themeMode: ,
+        //     ),
+        //   ),
+        // ),
+        );
   }
 }
+// class NewsCloud extends StatelessWidget {
+//   const NewsCloud({super.key, required this.repository});
+//   final NewsRepository repository;
+//   @override
+//   Widget build(BuildContext context) {
+//     return RepositoryProvider<NewsRepository>.value(
+//       value: repository,
+//       child: BlocProvider<NewsCubit>(
+//         create: (context) => NewsCubit(
+//           getTopHeadlines: GetTopHeadlines(repository: repository),
+//           searchArticles: SearchArticles(repository: repository),
+//         )..loadGeneralNews(),
+//         child: MaterialApp(
+//           debugShowCheckedModeBanner: false,
+//           initialRoute: AppRoutes.home,
+//           onGenerateRoute: RouteGenerator.generateRoute,
+//           title: 'NewsCloud',
+//           theme: ThemeData(
+//             colorScheme: ColorScheme.fromSeed(
+//               seedColor: Colors.black,
+//             ),
+//             useMaterial3: true,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

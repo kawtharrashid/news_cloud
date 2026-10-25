@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_cloud/core/constants.dart';
+import 'package:news_cloud/core/config/theme/cubit/theme_cubit.dart';
+import 'package:news_cloud/core/config/theme_data/app_colors.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/categories_list_view.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/news_list_view_builder.dart';
@@ -45,10 +48,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackGroundColor,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.amber[100],
         title: _isSearching
             ? TextField(
                 controller: _searchController,
@@ -60,48 +61,53 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 onSubmitted: _onSubmitted,
               )
-            : const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'News',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  Text(
-                    'Cloud',
-                    style: TextStyle(color: Colors.orange),
-                  ),
-                ],
-              ),
+            : const Text.rich(TextSpan(children: [
+                TextSpan(
+                  text: 'News',
+                ),
+                TextSpan(
+                    text: 'Cloud',
+                    style: TextStyle(color: AppColors.secondTitle)),
+              ])),
         actions: [
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
-            color: Colors.black,
             onPressed: _toggleSearch,
           ),
+          IconButton(
+              onPressed: () {
+                // log(_themeMode.toString());
+                log(Theme.of(context).brightness.toString());
+                context.read<ThemeCubit>().changeTheme();
+              },
+              icon: const Icon(Icons.switch_access_shortcut))
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 16,
-          ),
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              if (!_isSearching) ...[
-                const SliverToBoxAdapter(
-                  child: CategoriesListView(),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 24),
-                ),
-              ],
-              const NewsListViewBuilder<NewsCubit>(),
-            ],
-          ),
-        ),
+      body: BlocConsumer<ThemeCubit, ThemeMode>(
+        listener: (context, state) {
+          // ThemeMode.system == _themeMode,
+        },
+        builder: (context, state) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 1,
+                vertical: 6,
+              ),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  if (!_isSearching) ...[
+                    const SliverToBoxAdapter(
+                      child: CategoriesListView(),
+                    ),
+                  ],
+                  const NewsListViewBuilder<NewsCubit>(),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -25,7 +25,6 @@ class _CategoryViewState extends State<CategoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF2F4F3),
       appBar: CustomAppBar(
         title: widget.category,
       ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_cloud/core/config/theme_data/app_colors.dart';
 import 'package:news_cloud/core/constants.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_state.dart';
-import 'news_tile.dart';
+import 'news_card.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class NewsListViewBuilder<C extends StateStreamable<NewsState>>
@@ -23,7 +24,7 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
               child: Center(
                 child: LoadingAnimationWidget.hexagonDots(
                   size: 40,
-                  color: kAppColor,
+                  color: AppColors.primaryColor,
                 ),
               ),
             ),
@@ -44,8 +45,6 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
                     isSearchActive && !isSearchingQueryIsEmpty
                         ? 'No articles found for this search.'
                         : 'No articles available.',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.black54, fontSize: 16),
                   ),
                 ),
               ),
@@ -55,11 +54,8 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: NewsTile(
-                    articleEntity: state.articles[index],
-                  ),
+                return NewsCard(
+                  articleEntity: state.articles[index],
                 );
               },
               childCount: state.articles.length,
@@ -76,7 +72,7 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
                   state.message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: Colors.redAccent,
+                    color: AppColors.textErrorColor,
                   ),
                 ),
               ),

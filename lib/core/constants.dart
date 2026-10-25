@@ -1,37 +1,35 @@
-import 'package:flutter/material.dart';
 import 'package:news_cloud/features/data_layer/models/category_model.dart';
 
+const String imagesPath = 'assets/images';
 const List<CategoryModel> kCategories = [
   CategoryModel(
-    image: 'assets/business.avif',
+    image: '$imagesPath/business.avif',
     category: 'Business',
   ),
   CategoryModel(
-    image: 'assets/entertaiment.avif',
+    image: '$imagesPath/entertaiment.avif',
     category: 'Entertainment',
   ),
   CategoryModel(
-    image: 'assets/health.avif',
+    image: '$imagesPath/health.avif',
     category: 'Health',
   ),
   CategoryModel(
-    image: 'assets/science.avif',
+    image: '$imagesPath/science.avif',
     category: 'Science',
   ),
   CategoryModel(
-    image: 'assets/technology.jpeg',
+    image: '$imagesPath/technology.jpeg',
     category: 'Technology',
   ),
   CategoryModel(
-    image: 'assets/sports.avif',
+    image: '$imagesPath/sports.avif',
     category: 'Sports',
   ),
   CategoryModel(
-    image: 'assets/general.avif',
+    image: '$imagesPath/general.avif',
     category: 'General',
   ),
 ];
-
-const Color kAppColor = Color(0xffFFEAAE);
+const String roboto = 'Roboto';
 const defaultCategory = 'general';
-const Color kBackGroundColor = Color(0xffF2F4F3);

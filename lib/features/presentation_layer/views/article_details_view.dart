@@ -29,10 +29,10 @@ class ArticleDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+    // final buttonTextStyle =
+    //     Theme.of(context).textButtonTheme.style?.textStyle?.resolve({});
+    // log('Button font size: ${buttonTextStyle?.fontSize}');
     return Scaffold(
-      backgroundColor: const Color(0xffF2F4F3),
       appBar: CustomAppBar(title: article.sourceName ?? 'Article'),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -47,39 +47,43 @@ class ArticleDetailsView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                Text(article.title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20)),
+                Text(
+                  article.title,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
                 const SizedBox(height: 8),
                 if (article.description != null)
-                  Text(article.description!,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w400)),
+                  Text(
+                    article.description!,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
                     if (article.sourceName != null) ...[
-                      const Icon(Icons.person, size: 16, color: Colors.grey),
+                      const Icon(
+                        Icons.person,
+                      ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           article.sourceName!,
-                          style: const TextStyle(color: Colors.black54),
-                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
                       const SizedBox(width: 12),
                     ],
                     if (article.publishedAt != null) ...[
-                      const Icon(Icons.calendar_today,
-                          size: 16, color: Colors.grey),
+                      const Icon(
+                        Icons.calendar_today,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         article.publishedAt != null
-                            ? DateFormat('MMM d, yyyy, h:mm a')
+                            ? DateFormat('MMM d, yyyy ')
                                 .format(article.publishedAt!)
                             : 'Unknown date',
-                        style: theme.textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
                   ],
@@ -89,6 +93,7 @@ class ArticleDetailsView extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   article.content ?? 'No additional content available.',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -98,21 +103,14 @@ class ArticleDetailsView extends StatelessWidget {
                     else
                       Row(
                         children: [
-                          const Text('Read more on '),
-                          InkWell(
-                            onTap: () => _openArticle(url: article.url),
-                            child: Text(
-                              article.sourceName!,
-                              style: const TextStyle(
-                                color: Colors.amber,
-                                shadows: [
-                                  Shadow(
-                                      color: Colors.black26,
-                                      offset: Offset(.5, 1),
-                                      blurRadius: 3)
-                                ],
-                              ),
-                            ),
+                          Text(
+                            'Read more on ',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          TextButton(
+                            onPressed: () => _openArticle(url: article.url),
+                            child: Text(article.sourceName!,
+                                style: Theme.of(context).textTheme.labelSmall),
                           ),
                         ],
                       ),

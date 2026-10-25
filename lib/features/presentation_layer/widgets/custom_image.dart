@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:news_cloud/core/config/theme_data/app_colors.dart';
 
 import 'package:news_cloud/core/constants.dart';
 
@@ -34,7 +35,7 @@ class CustomImage extends StatelessWidget {
               child: Center(
                 child: LoadingAnimationWidget.hexagonDots(
                   size: 40,
-                  color: kAppColor,
+                  color: AppColors.primaryColor,
                 ),
               ),
             ),

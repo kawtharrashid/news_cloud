@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_cloud/core/config/theme_data/app_colors.dart';
 import 'package:news_cloud/core/routes/app_routes.dart';
 import 'package:news_cloud/features/data_layer/models/category_model.dart';
 
@@ -10,7 +11,7 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16),
+      padding: const EdgeInsets.all(6),
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(
@@ -31,16 +32,13 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: Text(
-                category.category,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+                child: Text(
+              category.category,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: AppColors.darkTextPrimary),
+            )),
           ),
         ),
       ),

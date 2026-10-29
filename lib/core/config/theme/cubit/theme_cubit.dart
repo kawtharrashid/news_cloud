@@ -5,7 +5,7 @@ class ThemeCubit extends Cubit<ThemeMode> {
   ThemeCubit() : super(ThemeMode.system);
 
   void changeTheme() {
-    if (state == ThemeMode.light) {
+    if (state == ThemeMode.system || state == ThemeMode.light) {
       emit(ThemeMode.dark);
     } else {
       emit(ThemeMode.light);

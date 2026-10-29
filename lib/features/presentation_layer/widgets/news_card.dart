@@ -19,6 +19,7 @@ class NewsCard extends StatelessWidget {
         articleEntity.content != null && articleEntity.content!.isNotEmpty;
 
     return Card(
+      margin: const EdgeInsets.symmetric(vertical: 3),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -27,34 +28,33 @@ class NewsCard extends StatelessWidget {
           Navigator.pushNamed(context, AppRoutes.articleDetails,
               arguments: articleEntity);
         },
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (image != null && image.isNotEmpty)
-                CustomImage(imageUrl: articleEntity.image)
-              else
-                const SizedBox.shrink(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                child: Column(
-                  children: [
-                    Text(articleEntity.title,
-                        maxLines: 2,
-                        style: Theme.of(context).textTheme.titleMedium),
-                    const SizedBox(height: 8),
-                    if (isContentNotEmpty)
-                      Text(
-                        articleEntity.content!,
-                        maxLines: 2,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                  ],
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (image != null && image.isNotEmpty)
+              ClipRRect(
+                  borderRadius: BorderRadiusGeometry.circular(6),
+                  child: CustomImage(imageUrl: articleEntity.image))
+            else
+              const SizedBox.shrink(),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  Text(articleEntity.title,
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  if (isContentNotEmpty)
+                    Text(
+                      articleEntity.content!,
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -28,14 +28,11 @@ class _CategoryViewState extends State<CategoryView> {
       appBar: CustomAppBar(
         title: widget.category,
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(6),
-        child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: [
-            NewsListViewBuilder<CategoryCubit>(),
-          ],
-        ),
+      body: const CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: [
+          NewsListViewBuilder<CategoryCubit>(),
+        ],
       ),
     );
   }

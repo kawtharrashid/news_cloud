@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cloud/core/config/theme_data/app_colors.dart';
-import 'package:news_cloud/core/constants.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_state.dart';
 import 'news_card.dart';

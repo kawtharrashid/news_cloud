@@ -1,146 +1,168 @@
 import 'package:flutter/material.dart';
-import 'package:news_cloud/core/constants.dart';
 import 'app_colors.dart';
 import 'global_theme.dart';
 
 class AppThemes {
-  static final ThemeData _base = globalTheme();
+  AppThemes._();
 
-  static final ThemeData light = _base.copyWith(
-    brightness: Brightness.light,
-    scaffoldBackgroundColor: AppColors.lightBackground,
-    colorScheme: const ColorScheme.light(
-      primary: AppColors.appBarLight,
-      surface: AppColors.lightSurface,
-      onPrimary: Colors.black,
-      onSurface: AppColors.lightTextPrimary,
-    ),
-    appBarTheme: _base.appBarTheme.copyWith(
-      backgroundColor: AppColors.appBarLight,
-      titleTextStyle: _base.appBarTheme.titleTextStyle?.copyWith(
-        color: AppColors.iconLight,
+  static ThemeData get light => _build(
+        brightness: Brightness.light,
+        scaffold: AppColors.lightBackground,
+        surface: AppColors.lightSurface,
+        appBar: AppColors.appBarLight,
+        iconColor: AppColors.iconLight,
+        textPrimary: AppColors.lightTextPrimary,
+        textSecondary: AppColors.lightTextSecondary,
+      );
+
+  static ThemeData get dark => _build(
+        brightness: Brightness.dark,
+        scaffold: AppColors.darkBackground,
+        surface: AppColors.darkSurface,
+        appBar: AppColors.appBarDark,
+        iconColor: AppColors.iconDark,
+        textPrimary: AppColors.darkTextPrimary,
+        textSecondary: AppColors.darkTextSecondary,
+      );
+
+  static ThemeData _build({
+    required Brightness brightness,
+    required Color scaffold,
+    required Color surface,
+    required Color appBar,
+    required Color iconColor,
+    required Color textPrimary,
+    required Color textSecondary,
+  }) {
+    final scheme = ColorScheme(
+      brightness: brightness,
+      primary: brightness == Brightness.light
+          ? AppColors.iconLight
+          : AppColors.iconDark,
+      onPrimary: brightness == Brightness.light
+          ? Colors.white
+          : AppColors.darkBackground,
+      secondary: AppColors.secondTitle,
+      onSecondary: Colors.black,
+      error: AppColors.textErrorColor,
+      onError: Colors.white,
+      surface: surface,
+      onSurface: textPrimary,
+    );
+
+    const baseTextTheme = GlobalTheme.textTheme;
+
+    final textTheme = baseTextTheme.copyWith(
+      titleLarge: baseTextTheme.titleLarge?.copyWith(
+        color: iconColor,
       ),
-      foregroundColor: AppColors.iconLight,
-      iconTheme: _base.appBarTheme.iconTheme?.copyWith(
-        color: AppColors.iconLight,
+      titleMedium: baseTextTheme.titleMedium?.copyWith(
+        color: textPrimary,
       ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        padding: EdgeInsets.zero,
-        minimumSize: Size.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        alignment: Alignment.centerLeft,
-        textStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          fontFamily: roboto,
-          shadows: [
-            Shadow(
-              color: AppColors.iconLight,
-              offset: Offset(0.5, 1),
-              blurRadius: 1,
-            ),
-          ],
+      headlineLarge: baseTextTheme.headlineLarge?.copyWith(
+        color: textPrimary,
+      ),
+      headlineMedium: baseTextTheme.headlineMedium?.copyWith(
+        color: textPrimary,
+      ),
+      labelSmall: baseTextTheme.labelSmall?.copyWith(
+        color: iconColor,
+      ),
+      bodyLarge: baseTextTheme.bodyLarge?.copyWith(
+        color: textPrimary,
+      ),
+      bodyMedium: baseTextTheme.bodyMedium?.copyWith(
+        color: textPrimary,
+      ),
+      bodySmall: baseTextTheme.bodySmall?.copyWith(
+        color: textSecondary,
+      ),
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: scheme,
+      brightness: brightness,
+      scaffoldBackgroundColor: scaffold,
+
+      // Typography
+      textTheme: textTheme,
+
+      // App bar
+      appBarTheme: GlobalTheme.appBarTheme.copyWith(
+        backgroundColor: appBar,
+        foregroundColor: iconColor,
+        titleTextStyle: GlobalTheme.appBarTheme.titleTextStyle?.copyWith(
+          color: iconColor,
+        ),
+        iconTheme: GlobalTheme.appBarTheme.iconTheme?.copyWith(
+          color: iconColor,
         ),
       ),
-    ),
-    iconTheme: _base.iconTheme.copyWith(color: AppColors.iconLight),
-    cardTheme: _base.cardTheme.copyWith(
-      color: AppColors.lightSurface,
-    ),
-    textTheme: _base.textTheme.copyWith(
-      titleLarge: _base.textTheme.titleLarge?.copyWith(
-        color: AppColors.iconLight,
-      ),
-      titleMedium: _base.textTheme.titleMedium?.copyWith(
-        color: AppColors.lightTextPrimary,
-      ),
-      labelSmall:
-          _base.textTheme.labelSmall?.copyWith(color: AppColors.iconLight),
-      headlineLarge: _base.textTheme.headlineLarge
-          ?.copyWith(color: AppColors.lightTextPrimary),
-      bodyLarge: _base.textTheme.bodyLarge?.copyWith(
-        color: AppColors.lightTextPrimary,
-      ),
-      headlineMedium: _base.textTheme.headlineLarge
-          ?.copyWith(color: AppColors.lightTextPrimary),
-      bodyMedium: _base.textTheme.bodyMedium?.copyWith(
-        color: AppColors.lightTextPrimary,
-      ),
-      bodySmall: _base.textTheme.bodySmall?.copyWith(
-        color: AppColors.lightTextSecondary,
-      ),
-    ),
-  );
 
-  static final ThemeData dark = _base.copyWith(
-    brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppColors.darkBackground,
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.appBarDark,
-      surface: AppColors.darkSurface,
-      onPrimary: Colors.black,
-      onSurface: AppColors.darkTextPrimary,
-    ),
-    appBarTheme: _base.appBarTheme.copyWith(
-      backgroundColor: AppColors.appBarDark,
-      foregroundColor: AppColors.iconDark,
-      iconTheme: _base.appBarTheme.iconTheme?.copyWith(
-        color: AppColors.iconDark,
-        // size: 24,
+      // Icon buttons
+      iconButtonTheme: GlobalTheme.iconButtonTheme,
+
+      // General icons
+      iconTheme: GlobalTheme.iconTheme.copyWith(
+        color: iconColor,
       ),
-      titleTextStyle: _base.appBarTheme.titleTextStyle?.copyWith(
-        color: AppColors.iconDark,
-      ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        padding: EdgeInsets.zero,
-        minimumSize: Size.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        alignment: Alignment.centerLeft,
-        textStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: AppColors.iconDark,
-          fontFamily: roboto,
-          shadows: [
-            Shadow(
-              color: AppColors.iconDark,
-              offset: Offset(0.5, 1),
-              blurRadius: 1,
-            ),
-          ],
+      switchTheme: GlobalTheme.switchThemeData,
+      inputDecorationTheme: GlobalTheme.inputDecorationTheme.copyWith(
+        iconColor: iconColor,
+        prefixIconColor: iconColor,
+        suffixIconColor: iconColor,
+        fillColor: appBar,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(24),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(24),
+          borderSide: BorderSide(
+            color: iconColor,
+            width: 1.2,
+          ),
         ),
       ),
-    ),
-    iconTheme: _base.iconTheme.copyWith(color: AppColors.iconDark),
-    cardTheme: _base.cardTheme.copyWith(
-      color: AppColors.darkSurface,
-    ),
-    textTheme: _base.textTheme.copyWith(
-      titleLarge: _base.textTheme.titleLarge?.copyWith(
-        color: AppColors.iconDark,
+
+      // Text buttons
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: iconColor,
+          padding: EdgeInsets.zero,
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          alignment: Alignment.centerLeft,
+          textStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Roboto',
+            shadows: [
+              Shadow(
+                color: iconColor,
+                offset: const Offset(0.5, 1),
+                blurRadius: 1,
+              ),
+            ],
+          ),
+        ),
       ),
-      titleMedium: _base.textTheme.titleMedium?.copyWith(
-        color: AppColors.darkTextPrimary,
+
+      // Popup menus
+      popupMenuTheme: GlobalTheme.popupMenuTheme.copyWith(
+        color: scaffold,
+        shadowColor: iconColor,
+        surfaceTintColor: appBar,
+        textStyle: GlobalTheme.popupMenuTheme.textStyle?.copyWith(
+          color: textPrimary,
+        ),
       ),
-      labelSmall:
-          _base.textTheme.labelSmall?.copyWith(color: AppColors.iconDark),
-      headlineLarge: _base.textTheme.headlineLarge
-          ?.copyWith(color: AppColors.darkTextPrimary),
-      headlineMedium: _base.textTheme.headlineLarge
-          ?.copyWith(color: AppColors.darkTextPrimary),
-      bodyLarge: _base.textTheme.bodyLarge?.copyWith(
-        color: AppColors.darkTextPrimary,
+
+      // Cards
+      cardTheme: CardThemeData(
+        color: surface,
       ),
-      bodyMedium: _base.textTheme.bodyMedium?.copyWith(
-        color: AppColors.darkTextPrimary,
-      ),
-      bodySmall: _base.textTheme.bodySmall?.copyWith(
-        color: AppColors.darkTextSecondary,
-      ),
-    ),
-  );
+    );
+  }
 }

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:news_cloud/core/config/theme_data/app_colors.dart';
 
-import 'package:news_cloud/core/constants.dart';
-
 class CustomImage extends StatelessWidget {
   const CustomImage({
     super.key,
@@ -20,7 +18,7 @@ class CustomImage extends StatelessWidget {
     }
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(6),
+      // borderRadius: BorderRadius.circular(6),
       child: CachedNetworkImage(
         imageUrl: imageUrl!,
         width: double.infinity,

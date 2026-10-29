@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cloud/core/config/theme/cubit/theme_cubit.dart';
@@ -21,14 +19,13 @@ class _HomeViewState extends State<HomeView> {
 
   void _toggleSearch() {
     setState(() => _isSearching = !_isSearching);
-
     if (!_isSearching) {
       _searchController.clear();
       context.read<NewsCubit>().loadGeneralNews();
     }
   }
 
-  void _onSubmitted(String query) {
+  void _onChanged(String query) {
     final trimmed = query.trim();
 
     if (trimmed.isEmpty) {
@@ -53,13 +50,18 @@ class _HomeViewState extends State<HomeView> {
         title: _isSearching
             ? TextField(
                 controller: _searchController,
-                autofocus: true,
                 textInputAction: TextInputAction.search,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Search articles...',
-                  border: InputBorder.none,
+                  prefixIcon: const Icon(
+                    Icons.search,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: _toggleSearch,
+                  ),
                 ),
-                onSubmitted: _onSubmitted,
+                onChanged: _onChanged,
               )
             : const Text.rich(TextSpan(children: [
                 TextSpan(
@@ -70,41 +72,76 @@ class _HomeViewState extends State<HomeView> {
                     style: TextStyle(color: AppColors.secondTitle)),
               ])),
         actions: [
-          IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search),
-            onPressed: _toggleSearch,
-          ),
-          IconButton(
-              onPressed: () {
-                // log(_themeMode.toString());
-                log(Theme.of(context).brightness.toString());
-                context.read<ThemeCubit>().changeTheme();
-              },
-              icon: const Icon(Icons.switch_access_shortcut))
+          BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              bool isDarkMode = themeMode == ThemeMode.dark;
+
+              return PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert),
+                onSelected: (value) {
+                  if (value == 'search') {
+                    if (!_isSearching) {
+                      _toggleSearch();
+                    }
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem<String>(
+                    value: 'search',
+                    child: Row(
+                      children: [
+                        Icon(Icons.search),
+                        SizedBox(width: 12),
+                        Text('Search'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    enabled: isDarkMode,
+                    child: BlocBuilder<ThemeCubit, ThemeMode>(
+                      builder: (context, themeMode) {
+                        return Row(
+                          children: [
+                            const Icon(Icons.dark_mode),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: Text('Dark mode'),
+                            ),
+                            Transform.scale(
+                              scale: 0.8,
+                              child: Switch(
+                                value: isDarkMode,
+                                onChanged: (_) {
+                                  context.read<ThemeCubit>().changeTheme();
+
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
         ],
       ),
-      body: BlocConsumer<ThemeCubit, ThemeMode>(
-        listener: (context, state) {
-          // ThemeMode.system == _themeMode,
-        },
+      body: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, state) {
           return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 1,
-                vertical: 6,
-              ),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  if (!_isSearching) ...[
-                    const SliverToBoxAdapter(
-                      child: CategoriesListView(),
-                    ),
-                  ],
-                  const NewsListViewBuilder<NewsCubit>(),
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                if (!_isSearching) ...[
+                  const SliverToBoxAdapter(
+                    child: CategoriesListView(),
+                  ),
                 ],
-              ),
+                const NewsListViewBuilder<NewsCubit>(),
+              ],
             ),
           );
         },

@@ -37,88 +37,94 @@ class ArticleDetailsView extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                CustomImage(imageUrl: article.image),
-                if (article.image != null && article.image!.isNotEmpty)
-                  const SizedBox(
-                    height: 16,
-                  ),
-                Text(
-                  article.title,
-                  style: Theme.of(context).textTheme.headlineMedium,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (article.image != null && article.image!.isNotEmpty)
+                CustomImage(imageUrl: article.image)
+              else
+                const SizedBox(
+                  height: 16,
                 ),
-                const SizedBox(height: 8),
-                if (article.description != null)
-                  Text(
-                    article.description!,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                const SizedBox(height: 12),
-                Row(
+              Padding(
+                padding: const EdgeInsets.all(6),
+                child: Column(
                   children: [
-                    if (article.sourceName != null) ...[
-                      const Icon(
-                        Icons.person,
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          article.sourceName!,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                    ],
-                    if (article.publishedAt != null) ...[
-                      const Icon(
-                        Icons.calendar_today,
-                      ),
-                      const SizedBox(width: 6),
+                    Text(
+                      article.title,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    if (article.description != null)
                       Text(
-                        article.publishedAt != null
-                            ? DateFormat('MMM d, yyyy ')
-                                .format(article.publishedAt!)
-                            : 'Unknown date',
-                        style: Theme.of(context).textTheme.bodySmall,
+                        article.description!,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Divider(),
-                const SizedBox(height: 8),
-                Text(
-                  article.content ?? 'No additional content available.',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    if (article.sourceName == null || article.url == null)
-                      const Text('No source available.')
-                    else
-                      Row(
-                        children: [
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        if (article.sourceName != null) ...[
+                          const Icon(
+                            Icons.person,
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              article.sourceName!,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                        ],
+                        if (article.publishedAt != null) ...[
+                          const Icon(
+                            Icons.calendar_today,
+                          ),
+                          const SizedBox(width: 6),
                           Text(
-                            'Read more on ',
+                            article.publishedAt != null
+                                ? DateFormat('MMM d, yyyy ')
+                                    .format(article.publishedAt!)
+                                : 'Unknown date',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          TextButton(
-                            onPressed: () => _openArticle(url: article.url),
-                            child: Text(article.sourceName!,
-                                style: Theme.of(context).textTheme.labelSmall),
-                          ),
                         ],
-                      ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    Text(
+                      article.content ?? 'No additional content available.',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        if (article.sourceName == null || article.url == null)
+                          const Text('No source available.')
+                        else
+                          Row(
+                            children: [
+                              Text(
+                                'Read more on ',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              TextButton(
+                                onPressed: () => _openArticle(url: article.url),
+                                child: Text(article.sourceName!,
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
                   ],
                 ),
-                const SizedBox(height: 16),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

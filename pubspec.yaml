@@ -44,6 +44,7 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.7
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
@@ -94,6 +95,23 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+# flutter_launcher_icons:
+#   android: true
+#   ios: true
+#   image_path: "assets/icon/app_icon.png"
+
+#   adaptive_icon_background: "#FFEAAE"
+#   adaptive_icon_foreground: "assets/icon/app_icon.png"
+#   adaptive_icon_foreground_inset: 16
+flutter_launcher_icons:
+  android: true
+  ios: true
+  web:
+    generate: true
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  image_path: assets/icon/app_icon.png
+  adaptive_icon_background: "#FFEAAE"
+  adaptive_icon_foreground: "assets/icon/app_icon.png"
+  adaptive_icon_foreground_inset: 0

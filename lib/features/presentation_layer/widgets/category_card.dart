@@ -21,8 +21,8 @@ class CategoryCard extends StatelessWidget {
           );
         },
         child: SizedBox(
-          height: 85,
-          width: 160,
+          height: 50,
+          width: 140,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),

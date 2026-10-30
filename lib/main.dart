@@ -32,10 +32,7 @@ Future<void> main() async {
 }
 
 class NewsCloud extends StatelessWidget {
-  const NewsCloud({
-    super.key,
-    required this.repository,
-  });
+  const NewsCloud({super.key, required this.repository});
 
   final NewsRepository repository;
 
@@ -47,17 +44,11 @@ class NewsCloud extends StatelessWidget {
         providers: [
           BlocProvider<NewsCubit>(
             create: (context) => NewsCubit(
-              getTopHeadlines: GetTopHeadlines(
-                repository: repository,
-              ),
-              searchArticles: SearchArticles(
-                repository: repository,
-              ),
+              getTopHeadlines: GetTopHeadlines(repository: repository),
+              searchArticles: SearchArticles(repository: repository),
             )..loadGeneralNews(),
           ),
-          BlocProvider<ThemeCubit>(
-            create: (context) => ThemeCubit(),
-          ),
+          BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
         ],
         child: BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, themeMode) {

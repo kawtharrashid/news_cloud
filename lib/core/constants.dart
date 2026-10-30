@@ -3,31 +3,31 @@ import 'package:news_cloud/features/data_layer/models/category_model.dart';
 const String imagesPath = 'assets/images';
 const List<CategoryModel> kCategories = [
   CategoryModel(
-    image: '$imagesPath/business.avif',
+    image: '$imagesPath/business.png',
     category: 'Business',
   ),
   CategoryModel(
-    image: '$imagesPath/entertaiment.avif',
+    image: '$imagesPath/entertainment.png',
     category: 'Entertainment',
   ),
   CategoryModel(
-    image: '$imagesPath/health.avif',
+    image: '$imagesPath/health.png',
     category: 'Health',
   ),
   CategoryModel(
-    image: '$imagesPath/science.avif',
+    image: '$imagesPath/science.png',
     category: 'Science',
   ),
   CategoryModel(
-    image: '$imagesPath/technology.jpeg',
+    image: '$imagesPath/technology.png',
     category: 'Technology',
   ),
   CategoryModel(
-    image: '$imagesPath/sports.avif',
+    image: '$imagesPath/sports.png',
     category: 'Sports',
   ),
   CategoryModel(
-    image: '$imagesPath/general.avif',
+    image: '$imagesPath/general.png',
     category: 'General',
   ),
 ];

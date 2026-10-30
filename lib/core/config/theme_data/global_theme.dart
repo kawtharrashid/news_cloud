@@ -101,11 +101,9 @@ abstract class GlobalTheme {
   );
 
 //switch
-  static SwitchThemeData switchThemeData = SwitchThemeData(
-    trackOutlineColor: const WidgetStatePropertyAll(
-      Colors.transparent,
-    ),
-    trackOutlineWidth: const WidgetStatePropertyAll(10),
+  static final SwitchThemeData switchThemeData = SwitchThemeData(
+    trackOutlineColor: const WidgetStatePropertyAll(AppColors.transParent),
+    trackOutlineWidth: const WidgetStatePropertyAll(0),
     thumbColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         return AppColors.lightBackground;
@@ -132,10 +130,10 @@ abstract class GlobalTheme {
       }
       return AppColors.grey;
     }),
-    splashRadius: 16,
+    splashRadius: 20,
     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     overlayColor: WidgetStatePropertyAll(
-      AppColors.iconLight.withValues(alpha: 0.12),
+      AppColors.iconLight.withValues(alpha: 0.2),
     ),
   );
 

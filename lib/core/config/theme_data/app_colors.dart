@@ -14,7 +14,9 @@ class AppColors {
   // Icons
   static const Color iconLight = Color(0xFF6D4C41);
   static const Color iconDark = Color(0xFFFFEAAE);
-  //
+
+  //helper
+  static const transParent = Colors.transparent;
   static const Color grey = Color(0xFFC5C9CE);
   // Light theme
   static const Color lightBackground = Color(0xFFF2F4F3);

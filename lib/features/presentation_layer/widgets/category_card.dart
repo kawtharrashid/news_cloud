@@ -11,7 +11,7 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(6),
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(
@@ -32,12 +32,19 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
             child: Center(
-                child: Text(
-              category.category,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: AppColors.darkTextPrimary),
+                child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: AppColors.lightTextPrimary.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                category.category,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: AppColors.darkTextPrimary),
+              ),
             )),
           ),
         ),

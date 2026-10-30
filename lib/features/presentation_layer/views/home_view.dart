@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cloud/core/config/theme/cubit/theme_cubit.dart';
@@ -75,9 +77,11 @@ class _HomeViewState extends State<HomeView> {
           BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
               bool isDarkMode = themeMode == ThemeMode.dark;
-
+              log(isDarkMode.toString());
               return PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert),
+                icon: const Icon(
+                  Icons.more_vert,
+                ),
                 onSelected: (value) {
                   if (value == 'search') {
                     if (!_isSearching) {
@@ -86,35 +90,45 @@ class _HomeViewState extends State<HomeView> {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem<String>(
+                  PopupMenuItem<String>(
                     value: 'search',
                     child: Row(
                       children: [
-                        Icon(Icons.search),
-                        SizedBox(width: 12),
-                        Text('Search'),
+                        Icon(
+                          Icons.search,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        const SizedBox(width: 12),
+                        Text('Search',
+                            style: Theme.of(context).textTheme.bodyMedium),
                       ],
                     ),
                   ),
                   PopupMenuItem<String>(
-                    enabled: isDarkMode,
                     child: BlocBuilder<ThemeCubit, ThemeMode>(
                       builder: (context, themeMode) {
+                        final isDarkMode = themeMode == ThemeMode.dark;
+
                         return Row(
                           children: [
-                            const Icon(Icons.dark_mode),
+                            Icon(
+                              Icons.dark_mode,
+                              color: Theme.of(context).iconTheme.color,
+                            ),
                             const SizedBox(width: 12),
-                            const Expanded(
-                              child: Text('Dark mode'),
+                            Expanded(
+                              child: Text(
+                                'Dark mode',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
                             ),
                             Transform.scale(
                               scale: 0.8,
                               child: Switch(
                                 value: isDarkMode,
-                                onChanged: (_) {
+                                onChanged: (value) {
                                   context.read<ThemeCubit>().changeTheme();
-
-                                  Navigator.pop(context);
+                                  Navigator.of(context).pop();
                                 },
                               ),
                             ),
@@ -132,16 +146,19 @@ class _HomeViewState extends State<HomeView> {
       body: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, state) {
           return SafeArea(
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                if (!_isSearching) ...[
-                  const SliverToBoxAdapter(
-                    child: CategoriesListView(),
-                  ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  if (!_isSearching) ...[
+                    const SliverToBoxAdapter(
+                      child: CategoriesListView(),
+                    ),
+                  ],
+                  const NewsListViewBuilder<NewsCubit>(),
                 ],
-                const NewsListViewBuilder<NewsCubit>(),
-              ],
+              ),
             ),
           );
         },

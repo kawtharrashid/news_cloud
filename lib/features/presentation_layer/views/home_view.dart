@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cloud/core/config/theme/cubit/theme_cubit.dart';
@@ -49,21 +47,27 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        toolbarHeight: 60,
         title: _isSearching
-            ? TextField(
-                controller: _searchController,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  hintText: 'Search articles...',
-                  prefixIcon: const Icon(
-                    Icons.search,
-                  ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: _toggleSearch,
-                  ),
+            ? Container(
+                margin: const EdgeInsets.only(
+                  bottom: 6,
                 ),
-                onChanged: _onChanged,
+                child: TextField(
+                  controller: _searchController,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    hintText: 'Search articles...',
+                    prefixIcon: const Icon(
+                      Icons.search,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: _toggleSearch,
+                    ),
+                  ),
+                  onChanged: _onChanged,
+                ),
               )
             : const Text.rich(TextSpan(children: [
                 TextSpan(
@@ -76,17 +80,13 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
-              bool isDarkMode = themeMode == ThemeMode.dark;
-              log(isDarkMode.toString());
+              final isDarkMode = themeMode == ThemeMode.dark;
+
               return PopupMenuButton<String>(
-                icon: const Icon(
-                  Icons.more_vert,
-                ),
+                icon: const Icon(Icons.more_vert),
                 onSelected: (value) {
-                  if (value == 'search') {
-                    if (!_isSearching) {
-                      _toggleSearch();
-                    }
+                  if (value == 'search' && !_isSearching) {
+                    _toggleSearch();
                   }
                 },
                 itemBuilder: (context) => [
@@ -99,48 +99,48 @@ class _HomeViewState extends State<HomeView> {
                           color: Theme.of(context).iconTheme.color,
                         ),
                         const SizedBox(width: 12),
-                        Text('Search',
-                            style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          'Search',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
                   ),
                   PopupMenuItem<String>(
-                    child: BlocBuilder<ThemeCubit, ThemeMode>(
-                      builder: (context, themeMode) {
-                        final isDarkMode = themeMode == ThemeMode.dark;
-
-                        return Row(
-                          children: [
-                            Icon(
-                              Icons.dark_mode,
-                              color: Theme.of(context).iconTheme.color,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                'Dark mode',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ),
-                            Transform.scale(
-                              scale: 0.8,
-                              child: Switch(
-                                value: isDarkMode,
-                                onChanged: (value) {
-                                  context.read<ThemeCubit>().changeTheme();
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                    enabled: isDarkMode,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.dark_mode,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Dark mode',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: isDarkMode
+                                        ? null
+                                        : Theme.of(context).disabledColor,
+                                  ),
+                        ),
+                        Transform.scale(
+                          scale: 0.8,
+                          child: Switch(
+                            value: isDarkMode,
+                            onChanged: (_) {
+                              context.read<ThemeCubit>().changeTheme();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               );
             },
-          )
+          ),
         ],
       ),
       body: BlocBuilder<ThemeCubit, ThemeMode>(
@@ -148,16 +148,29 @@ class _HomeViewState extends State<HomeView> {
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.only(top: 3),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  if (!_isSearching) ...[
-                    const SliverToBoxAdapter(
-                      child: CategoriesListView(),
-                    ),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  if (_isSearching &&
+                      _searchController.text.trim().isNotEmpty) {
+                    await context
+                        .read<NewsCubit>()
+                        .searchNews(query: _searchController.text.trim());
+                  } else {
+                    await context.read<NewsCubit>().loadGeneralNews();
+                  }
+                },
+                color: AppColors.primaryColor,
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    if (!_isSearching) ...[
+                      const SliverToBoxAdapter(
+                        child: CategoriesListView(),
+                      ),
+                    ],
+                    const NewsListViewBuilder<NewsCubit>(),
                   ],
-                  const NewsListViewBuilder<NewsCubit>(),
-                ],
+                ),
               ),
             ),
           );

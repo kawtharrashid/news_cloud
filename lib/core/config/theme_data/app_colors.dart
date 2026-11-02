@@ -16,7 +16,7 @@ class AppColors {
   static const Color iconDark = Color(0xFFFFEAAE);
 
   //helper
-  static const transParent = Colors.transparent;
+  static const Color transParent = Colors.transparent;
   static const Color grey = Color(0xFFC5C9CE);
   // Light theme
   static const Color lightBackground = Color(0xFFF2F4F3);
@@ -29,7 +29,11 @@ class AppColors {
   static const Color darkSurface = Color(0xFF262626);
   static const Color darkTextPrimary = Color(0xFFF5F5F5);
   static const Color darkTextSecondary = Color(0xFFC2C2C2);
-
+  //shimer
+  static const Color shimmerBaseColorLight = Color(0xFFD6D6D6);
+  static const Color shimmerBaseColorDark = Color(0xFF424242);
+  static const Color shimmerHighlightColorLight = Color(0xFFF5F5F5);
+  static const Color shimmerHighlightColorDark = Color(0xFF616161);
   // Shared states
   static const Color textErrorColor = Colors.redAccent;
 }

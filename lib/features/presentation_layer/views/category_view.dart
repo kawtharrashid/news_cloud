@@ -28,11 +28,18 @@ class _CategoryViewState extends State<CategoryView> {
       appBar: CustomAppBar(
         title: widget.category,
       ),
-      body: const CustomScrollView(
-        physics: BouncingScrollPhysics(),
-        slivers: [
-          NewsListViewBuilder<CategoryCubit>(),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<CategoryCubit>().loadCategory(
+                category: widget.category.toLowerCase(),
+              );
+        },
+        child: const CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            NewsListViewBuilder<CategoryCubit>(),
+          ],
+        ),
       ),
     );
   }

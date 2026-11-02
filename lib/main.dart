@@ -17,6 +17,8 @@ import 'features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final themeCubit = ThemeCubit();
+  await themeCubit.loadTheme(ThemeMode.system);
 
   await dotenv.load(fileName: '.env');
 
@@ -28,7 +30,10 @@ Future<void> main() async {
     newsService: newsService,
   );
 
-  runApp(NewsCloud(repository: repository));
+  runApp(BlocProvider.value(
+    value: themeCubit,
+    child: NewsCloud(repository: repository),
+  ));
 }
 
 class NewsCloud extends StatelessWidget {
@@ -40,16 +45,11 @@ class NewsCloud extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider<NewsRepository>.value(
       value: repository,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<NewsCubit>(
-            create: (context) => NewsCubit(
-              getTopHeadlines: GetTopHeadlines(repository: repository),
-              searchArticles: SearchArticles(repository: repository),
-            )..loadGeneralNews(),
-          ),
-          BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
-        ],
+      child: BlocProvider<NewsCubit>(
+        create: (context) => NewsCubit(
+          getTopHeadlines: GetTopHeadlines(repository: repository),
+          searchArticles: SearchArticles(repository: repository),
+        )..loadGeneralNews(),
         child: BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, themeMode) {
             return MaterialApp(

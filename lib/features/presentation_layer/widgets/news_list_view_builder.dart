@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cloud/core/config/theme_data/app_colors.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_state.dart';
-import 'news_card.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:news_cloud/features/presentation_layer/widgets/news_card.dart';
+
+import 'news_list_shimmer.dart';
 
 class NewsListViewBuilder<C extends StateStreamable<NewsState>>
     extends StatelessWidget {
@@ -17,17 +18,7 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
     return BlocBuilder<C, NewsState>(
       builder: (context, state) {
         if (state is NewsLoading) {
-          return SliverToBoxAdapter(
-            child: SizedBox(
-              height: 300,
-              child: Center(
-                child: LoadingAnimationWidget.hexagonDots(
-                  size: 40,
-                  color: AppColors.primaryColor,
-                ),
-              ),
-            ),
-          );
+          return const NewsListShimmer();
         }
 
         if (state is NewsLoaded) {
@@ -48,7 +39,7 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
                 ),
               ),
             );
-          }
+          } //todo djdf
 
           return SliverList(
             delegate: SliverChildBuilderDelegate(

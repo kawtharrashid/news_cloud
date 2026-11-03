@@ -138,7 +138,7 @@ void main() {
       act: (cubit) => cubit.loadGeneralNews(),
       expect: () => [
         const NewsLoading(),
-        const NewsError(message: 'No internet connection'),
+        const NewsError(message: NetworkFailure('No internet connection')),
       ],
     );
 
@@ -151,7 +151,7 @@ void main() {
       act: (cubit) => cubit.loadGeneralNews(),
       expect: () => [
         const NewsLoading(),
-        const NewsError(message: 'Something went wrong'),
+        const NewsError(message: UnknownFailure('Something went wrong')),
       ],
     );
 

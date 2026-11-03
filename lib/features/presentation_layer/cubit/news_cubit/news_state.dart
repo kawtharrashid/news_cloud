@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:news_cloud/core/errors/failure.dart';
 
 import '../../../domain_layer/entities/article_entity.dart';
 
@@ -27,7 +28,7 @@ final class NewsLoaded extends NewsState {
 }
 
 final class NewsError extends NewsState {
-  final String message;
+  final Failure message;
 
   const NewsError({required this.message});
 

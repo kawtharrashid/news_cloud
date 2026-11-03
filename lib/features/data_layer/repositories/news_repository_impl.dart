@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
-import 'package:news_cloud/core/errors/dio_error_mapper.dart';
-import 'package:news_cloud/core/errors/failure.dart';
+import 'package:news_cloud/core/errors/error_mapper.dart';
+import 'package:news_cloud/core/errors/exceptions.dart';
 import 'package:news_cloud/core/services/news_service.dart';
 import 'package:news_cloud/features/domain_layer/entities/article_entity.dart';
 import 'package:news_cloud/features/domain_layer/repositories/news_repository.dart';
@@ -20,10 +19,8 @@ class NewsRepositoryImpl implements NewsRepository {
       return await newsService.getTopHeadlines(
         category: category,
       );
-    } on DioException catch (e) {
-      throw NetworkFailure(
-        DioErrorMapper.map(e),
-      );
+    } on AppException catch (error) {
+      throw ErrorMapper.toFailure(error);
     }
   }
 
@@ -35,10 +32,8 @@ class NewsRepositoryImpl implements NewsRepository {
       return await newsService.searchArticles(
         query: query,
       );
-    } on DioException catch (e) {
-      throw NetworkFailure(
-        DioErrorMapper.map(e),
-      );
+    } on AppException catch (error) {
+      throw ErrorMapper.toFailure(error);
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'app_colors.dart';
 import 'global_theme.dart';
 
@@ -141,7 +142,7 @@ class AppThemes {
             shadows: [
               Shadow(
                 color: iconColor,
-                offset: const Offset(0.5, 1),
+                offset: const Offset(0.2, 0.2),
                 blurRadius: 1,
               ),
             ],

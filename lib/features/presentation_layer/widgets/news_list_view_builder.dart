@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_cloud/core/config/theme_data/app_colors.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_state.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/news_card.dart';
+import 'package:news_cloud/features/presentation_layer/widgets/show_alert_dialog.dart';
 
 import 'news_list_shimmer.dart';
 
@@ -39,7 +39,7 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
                 ),
               ),
             );
-          } //todo djdf
+          }
 
           return SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -52,20 +52,10 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
             ),
           );
         }
-
         if (state is NewsError) {
           return SliverToBoxAdapter(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  state.message,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: AppColors.textErrorColor,
-                  ),
-                ),
-              ),
+            child: ShowAlertDialog(
+              content: state.message.message,
             ),
           );
         }
@@ -76,3 +66,21 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
     );
   }
 }
+
+// Widget showSnackbar(
+//   BuildContext context,
+//   String message,
+// ) {
+//   ScaffoldMessenger.of(context).showSnackBar(
+//     SnackBar(
+//       content: Text(message),
+//       behavior: SnackBarBehavior.floating,
+//       margin: const EdgeInsets.all(16),
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(16),
+//       ),
+//       backgroundColor: Colors.grey.shade900,
+//       duration: const Duration(seconds: 2),
+//     ),
+//   );
+// }

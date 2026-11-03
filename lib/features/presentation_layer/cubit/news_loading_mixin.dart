@@ -16,13 +16,16 @@ mixin NewsLoadingMixin on Cubit<NewsState> {
     try {
       final articles = await request();
       emit(NewsLoaded(articles: articles));
-    } on Failure catch (failure) {
-      emit(NewsError(message: failure.message));
-    } catch (e, stackTrace) {
-      log('NEWS ERROR: $e');
-      log('STACK TRACE: $stackTrace');
+    } on Failure catch (message) {
+      emit(NewsError(message: message));
+    } catch (error, stackTrace) {
+      log(
+        'NEWS ERROR',
+        error: error,
+        stackTrace: stackTrace,
+      );
 
-      emit(const NewsError(message: 'Something went wrong'));
+      emit(const NewsError(message: UnknownFailure('Something went wrong')));
     }
   }
 }

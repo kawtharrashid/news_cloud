@@ -1,27 +1,30 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:news_cloud/core/errors/exceptions.dart';
 
 class DioErrorMapper {
-  static String map(DioException error) {
+  DioErrorMapper._();
+
+  static AppException map(DioException error) {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
-        return 'Connection timeout. Please try again.';
-
       case DioExceptionType.sendTimeout:
-        return 'Request timeout. Please try again.';
-
       case DioExceptionType.receiveTimeout:
-        return 'Server took too long to respond.';
-
+        return const TimeoutException(
+          message:
+              'Request timed out. Please check your internet connection and try again.',
+        );
       case DioExceptionType.connectionError:
-        return 'No internet connection. Please check your network.';
-
-      case DioExceptionType.badResponse:
-        return _statusCode(error.response?.statusCode);
+        return const NetworkException(
+          message:
+              'No internet connection. Please check your connection and try again.',
+        );
 
       case DioExceptionType.cancel:
-        return 'Request was cancelled.';
+        return const UnknownException(
+          message: 'Request was cancelled.',
+        );
 
       case DioExceptionType.unknown:
       case DioExceptionType.badCertificate:
@@ -35,11 +38,33 @@ class DioErrorMapper {
         log('Response Data: ${error.response?.data}');
         log('Request URL: ${error.requestOptions.uri}');
         log('===========================================');
-        return 'Something went wrong. Please try again.';
+        return const UnknownException(
+          message: 'Something went wrong. Please try again.',
+        );
+      case DioExceptionType.badResponse:
+        return _statusCode(error.response?.statusCode);
     }
   }
 
-  static String _statusCode(int? statusCode) {
+  static AppException _statusCode(int? statusCode) {
+    switch (statusCode) {
+      case 400:
+      case 401:
+      case 403:
+      case 404:
+      case 429:
+      case 500:
+        return ServerException(
+          message: _statusMessage(statusCode!),
+        );
+      default:
+        return const ServerException(
+          message: 'Server error. Please try again.',
+        );
+    }
+  }
+
+  static String _statusMessage(int statusCode) {
     switch (statusCode) {
       case 400:
         return 'Bad request.';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_state.dart';
@@ -54,10 +55,20 @@ class NewsListViewBuilder<C extends StateStreamable<NewsState>>
         }
         if (state is NewsError) {
           return SliverToBoxAdapter(
-            child: ShowAlertDialog(
-              content: state.message.message,
+              child: CustomAlertDialog(
+            title: const Row(
+              children: [
+                Icon(Icons.error_outline_outlined, size: 20, color: Colors.red),
+                SizedBox(
+                  width: 8,
+                ),
+                Text("Error")
+              ],
             ),
-          );
+            content: state.failure.message,
+            onPressedCancel: () => SystemNavigator.pop(),
+            onPressedOK: () => context.read<NewsCubit>().loadGeneralNews(),
+          ));
         }
         return const SliverToBoxAdapter(
           child: SizedBox.shrink(),

@@ -12,8 +12,7 @@ class DioErrorMapper {
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
         return const TimeoutException(
-          message:
-              'Request timed out. Please check your internet connection and try again.',
+          message: 'Please check your internet connection and try again.',
         );
       case DioExceptionType.connectionError:
         return const NetworkException(

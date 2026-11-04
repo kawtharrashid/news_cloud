@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:news_cloud/features/domain_layer/entities/article_entity.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/custom_app_bar.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/custom_image.dart';
+import 'package:news_cloud/features/presentation_layer/widgets/show_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ArticleDetailsView extends StatelessWidget {
@@ -29,9 +30,7 @@ class ArticleDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final buttonTextStyle =
-    //     Theme.of(context).textButtonTheme.style?.textStyle?.resolve({});
-    // log('Button font size: ${buttonTextStyle?.fontSize}');
+    final bool hasImage = article.image != null && article.image!.isNotEmpty;
     return Scaffold(
       appBar: CustomAppBar(title: article.sourceName ?? 'Article'),
       body: SafeArea(
@@ -40,12 +39,11 @@ class ArticleDetailsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (article.image != null && article.image!.isNotEmpty)
-                CustomImage(imageUrl: article.image)
-              else
-                const SizedBox(
-                  height: 16,
-                ),
+              if (hasImage) ...[
+                CustomImage(imageUrl: article.image),
+                const SizedBox(height: 12),
+              ] else
+                const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.all(6),
                 child: Column(
@@ -111,7 +109,22 @@ class ArticleDetailsView extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               TextButton(
-                                onPressed: () => _openArticle(url: article.url),
+                                onPressed: () {
+                                  showDialog<void>(
+                                    context: context,
+                                    builder: (context) => CustomAlertDialog(
+                                      title: const Text('Open Article'),
+                                      content:
+                                          'Do you want to open the article in your browser?',
+                                      onPressedCancel: () =>
+                                          Navigator.of(context).pop(),
+                                      onPressedOK: () async {
+                                        Navigator.of(context).pop();
+                                        await _openArticle(url: article.url);
+                                      },
+                                    ),
+                                  );
+                                },
                                 child: Text(article.sourceName!,
                                     style:
                                         Theme.of(context).textTheme.labelSmall),

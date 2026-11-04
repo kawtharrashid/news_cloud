@@ -28,10 +28,10 @@ final class NewsLoaded extends NewsState {
 }
 
 final class NewsError extends NewsState {
-  final Failure message;
+  final Failure failure;
 
-  const NewsError({required this.message});
+  const NewsError({required this.failure});
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [failure];
 }

@@ -13,7 +13,9 @@ theme preferences, and clear loading, empty, and error states.
   <tr>
     <td><img src="screenshots/home-page.png" width="160" alt="Home screen"></td>
     <td><img src="screenshots/category.png" width="160" alt="Category screen"></td>
+    <td><img src="screenshots/search.png" width="160" alt="Search screen"></td>
     <td><img src="screenshots/article-details.png" width="160" alt="Article details screen"></td>
+    <td><img src="screenshots/confirm-open-article.png" width="160" alt="Confirm open article dialog"></td>
     <td><img src="screenshots/error-state.png" width="160" alt="Error state screen"></td>
     <td><img src="screenshots/shimmer.png" width="160" alt="Loading shimmer screen"></td>
   </tr>

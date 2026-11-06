@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_cloud/core/config/theme/cubit/theme_cubit.dart';
 import 'package:news_cloud/core/config/theme_data/app_colors.dart';
+import 'package:news_cloud/core/routes/app_routes.dart';
 import 'package:news_cloud/features/presentation_layer/cubit/news_cubit/news_cubit.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/categories_list_view.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/news_list_view_builder.dart';
@@ -107,6 +108,28 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   PopupMenuItem<String>(
+                    value: 'saved_articles',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.bookmark,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        const SizedBox(width: 12),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.savedArticles);
+                          },
+                          child: Text(
+                            'Saved Articles',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
                     enabled: isDarkMode,
                     child: Row(
                       children: [
@@ -124,6 +147,7 @@ class _HomeViewState extends State<HomeView> {
                                         : Theme.of(context).disabledColor,
                                   ),
                         ),
+                        const Spacer(),
                         Transform.scale(
                           scale: 0.8,
                           child: Switch(

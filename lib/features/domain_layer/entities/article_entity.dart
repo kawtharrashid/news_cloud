@@ -8,7 +8,6 @@ class ArticleEntity extends Equatable {
   final String? url;
   final DateTime? publishedAt;
   final String? sourceName;
-
   const ArticleEntity({
     this.image,
     required this.title,

@@ -28,4 +28,28 @@ class ArticleModel extends ArticleEntity {
       sourceName: sourceName,
     );
   }
+
+  factory ArticleModel.fromEntity(ArticleEntity article) {
+    return ArticleModel(
+      image: article.image,
+      title: article.title,
+      description: article.description,
+      content: article.content,
+      url: article.url,
+      publishedAt: article.publishedAt,
+      sourceName: article.sourceName,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'urlToImage': image,
+      'title': title,
+      'description': description,
+      'content': content,
+      'url': url,
+      'publishedAt': publishedAt?.toIso8601String(),
+      'source': {'name': sourceName},
+    };
+  }
 }

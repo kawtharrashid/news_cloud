@@ -33,3 +33,4 @@ const List<CategoryModel> kCategories = [
 ];
 const String roboto = 'Roboto';
 const defaultCategory = 'general';
+const kArticlesCacheBox = 'articles_cache';

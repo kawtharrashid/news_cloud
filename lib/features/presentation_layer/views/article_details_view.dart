@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:news_cloud/features/domain_layer/entities/article_entity.dart';
+import 'package:news_cloud/features/presentation_layer/cubit/saved_news_cubit/saved_news_cubit.dart';
+import 'package:news_cloud/features/presentation_layer/widgets/bookmark_button.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/custom_app_bar.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/custom_image.dart';
 import 'package:news_cloud/features/presentation_layer/widgets/show_alert_dialog.dart';
@@ -15,13 +20,10 @@ class ArticleDetailsView extends StatelessWidget {
     if (url == null || url.isEmpty) {
       return;
     }
-
     final uri = Uri.tryParse(url);
-
     if (uri == null) {
       return;
     }
-
     await launchUrl(
       uri,
       mode: LaunchMode.externalApplication,
@@ -30,9 +32,46 @@ class ArticleDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int i = 0;
     final bool hasImage = article.image != null && article.image!.isNotEmpty;
     return Scaffold(
-      appBar: CustomAppBar(title: article.sourceName ?? 'Article'),
+      appBar: CustomAppBar(
+        title: article.sourceName ?? 'Article',
+        actions: [
+          BlocBuilder<SavedNewsCubit, SavedNewsState>(
+            buildWhen: (_, current) =>
+                current is SavedNewsCubitLoaded ||
+                current is SavedNewsCubitError,
+            builder: (context, state) {
+              final isSaved = state is SavedNewsCubitLoaded &&
+                  state.savedArticles.any((savedArticle) {
+                    ++i;
+                    log(' Num of saved articles: ${i.toString()}');
+                    return savedArticle.url == article.url;
+                  });
+              return BookmarkButton(
+                isSaved: isSaved,
+                onPressed: () async {
+                  if (article.url == null || article.url!.isEmpty) {
+                    return;
+                  }
+                  if (isSaved) {
+                    await context
+                        .read<SavedNewsCubit>()
+                        .removeArticle(articleURL: article.url!);
+                    log('Article removed from saved articles');
+                  } else {
+                    await context
+                        .read<SavedNewsCubit>()
+                        .saveArticle(article: article);
+                    log('Article saved');
+                  }
+                },
+              );
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -116,6 +155,7 @@ class ArticleDetailsView extends StatelessWidget {
                                       title: const Text('Open Article'),
                                       content:
                                           'Do you want to open the article in your browser?',
+                                      okButtonText: 'Open',
                                       onPressedCancel: () =>
                                           Navigator.of(context).pop(),
                                       onPressedOK: () async {

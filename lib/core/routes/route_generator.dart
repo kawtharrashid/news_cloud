@@ -7,6 +7,7 @@ import 'package:news_cloud/features/presentation_layer/cubit/category_cubit/cate
 import 'package:news_cloud/features/presentation_layer/views/article_details_view.dart';
 import 'package:news_cloud/features/presentation_layer/views/category_view.dart';
 import 'package:news_cloud/features/presentation_layer/views/home_view.dart';
+import 'package:news_cloud/features/presentation_layer/views/saved_articles_view.dart';
 import 'app_routes.dart';
 
 class RouteGenerator {
@@ -38,6 +39,10 @@ class RouteGenerator {
               category: category,
             ),
           ),
+        );
+      case AppRoutes.savedArticles:
+        return MaterialPageRoute(
+        builder: (_) => const SavedArticlesView(),
         );
       default:
         return MaterialPageRoute(

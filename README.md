@@ -15,6 +15,7 @@ theme preferences, and clear loading, empty, and error states.
     <td><img src="screenshots/category.png" width="160" alt="Category screen"></td>
     <td><img src="screenshots/search.png" width="160" alt="Search screen"></td>
     <td><img src="screenshots/article-details.png" width="160" alt="Article details screen"></td>
+    <td><img src="screenshots/saved-articles.png" width="160" alt="Saved articles screen"></td>
     <td><img src="screenshots/confirm-open-article.png" width="160" alt="Confirm open article dialog"></td>
     <td><img src="screenshots/error-state.png" width="160" alt="Error state screen"></td>
     <td><img src="screenshots/shimmer.png" width="160" alt="Loading shimmer screen"></td>
@@ -36,6 +37,13 @@ theme preferences, and clear loading, empty, and error states.
   - General
 - Tap any news card to open its full article view.
 - Pull down to refresh the home feed or a category feed.
+- Save articles from the article details screen for later reading.
+
+### Saved articles
+
+- Open saved articles from the home screen menu.
+- View saved articles when offline after they have been stored locally.
+- Remove saved articles with a long press and confirmation, or tap the bookmark icon on the article details screen.
 
 ### Search
 
@@ -55,6 +63,7 @@ Each article can display:
 - Source name
 - Publication date formatted for readability
 - A link to open the original article in the external browser
+- A bookmark control to save or remove the article
 
 Missing images, dates, content, and source links are handled gracefully.
 
@@ -73,13 +82,14 @@ Missing images, dates, content, and source links are handled gracefully.
 
 ## Screens and navigation
 
-The app contains three main flows:
+The app contains four main flows:
 
 1. **Home** — general headlines, category shortcuts, search, theme controls,
-   refresh, and article cards.
+   saved articles, refresh, and article cards.
 2. **Category** — articles for a selected category with refresh support.
 3. **Article details** — complete article information and an external
-   "Read more" link.
+   "Read more" link, plus save and remove bookmark actions.
+4. **Saved articles** — locally stored articles with long-press removal.
 
 Navigation is handled through named routes and a route generator. Each
 category screen receives its own `CategoryCubit`, while the home screen uses
@@ -109,7 +119,7 @@ lib/
     │   └── usecases/           # Get headlines and search articles
     │
     └── presentation_layer/
-        ├── cubit/              # News, category, and theme state
+        ├── cubit/              # News, category, saved article, and theme state
         ├── views/              # App screens
         └── widgets/            # Reusable UI components
 ```
@@ -145,6 +155,7 @@ the UI to display the actual user-friendly message.
 - [Flutter Dotenv](https://pub.dev/packages/flutter_dotenv) for local API
   configuration
 - [Cached Network Image](https://pub.dev/packages/cached_network_image)
+- [Hive](https://pub.dev/packages/hive_flutter) for local saved article storage
 - [Shimmer](https://pub.dev/packages/shimmer)
 - [Intl](https://pub.dev/packages/intl) for date formatting
 - [Shared Preferences](https://pub.dev/packages/shared_preferences) for
@@ -240,13 +251,13 @@ NewsCloud was built as a Flutter portfolio project to practice:
 - Reusable and responsive Flutter widgets
 - Named navigation and route generation
 - Local preference persistence
+- Local saved article persistence
 - Automated testing and CI
 
 ## Future improvements
 
 - Pagination or infinite scrolling
-- Favorites and bookmarks
-- Offline article caching
+- Broader offline article caching
 - More comprehensive widget and integration tests
 - Accessibility improvements
 - A backend proxy for production API key protection
